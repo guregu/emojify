@@ -49,7 +49,6 @@ func TestWithAttr(t *testing.T) {
 	got := repl.Replace(test)
 	for _, emoji := range []string{"🐦‍⬛", "🌎", "🐦", "🦤"} {
 		mdattr := fmt.Sprintf(`data-md="%s"`, emoji)
-		t.Log(got)
 		if !strings.Contains(got, mdattr) {
 			t.Error("not found:", emoji, "in:", got)
 		}
