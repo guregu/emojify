@@ -39,7 +39,7 @@ type emojiMatch struct {
 func New(opts ...Option) Twemoji {
 	t := Twemoji{
 		cdn:   officialCDN,
-		fmt:   FormatSVG,
+		fmt:   SVG,
 		class: defaultClass,
 		nodes: make(map[rune][]emojiMatch),
 	}
@@ -52,8 +52,8 @@ func New(opts ...Option) Twemoji {
 	return t
 }
 
-func (twemoji *Twemoji) load() error {
-	repl := make([]string, 0, len(twemojiFiles)*2)
+func (tw *Twemoji) load() error {
+	keyvals := make([]string, 0, len(twemojiFiles)*2)
 	var buf bytes.Buffer
 	for _, base := range twemojiFiles {
 		ext := path.Ext(base)
@@ -70,7 +70,7 @@ func (twemoji *Twemoji) load() error {
 		item := emojiMatch{
 			str:  string(runes),
 			img:  base,
-			node: twemoji.node(string(runes), base),
+			node: tw.node(string(runes), base),
 		}
 
 		buf.Reset()
@@ -79,20 +79,20 @@ func (twemoji *Twemoji) load() error {
 		}
 
 		elem := buf.String()
-		repl = append(repl, item.str, elem)
+		keyvals = append(keyvals, item.str, elem)
 
 		head, _ := utf8.DecodeRuneInString(item.str)
-		matches := twemoji.nodes[head]
+		matches := tw.nodes[head]
 		matches = append(matches, item)
-		twemoji.nodes[head] = matches
+		tw.nodes[head] = matches
 	}
-	twemoji.replacer = strings.NewReplacer(repl...)
+	tw.replacer = strings.NewReplacer(keyvals...)
 	return nil
 }
 
 func (tw Twemoji) node(emoji string, src string) *html.Node {
 	dir := tw.fmt.Dir()
-	if tw.fmt == FormatPNG {
+	if tw.fmt == PNG {
 		src = src[:len(src)-len("svg")] + "png"
 	}
 	img := &html.Node{
@@ -117,6 +117,8 @@ func (tw Twemoji) node(emoji string, src string) *html.Node {
 // Option used in [New].
 type Option func(*Twemoji)
 
+// WithCDN specifies the CDN (i.e. URL root) for the emoji image assets.
+// Default value is the official (jsDelivr) CDN.
 func WithCDN(href string) Option {
 	if href != "" && !strings.HasSuffix(href, "/") {
 		href = href + "/"
@@ -126,6 +128,8 @@ func WithCDN(href string) Option {
 	}
 }
 
+// WithClass specifies the class given to emoji replacement <img> elements.
+// Default is "twemoji".
 func WithClass(class string) Option {
 	return func(t *Twemoji) {
 		t.class = class
@@ -153,15 +157,18 @@ func WithFormat(f Format) Option {
 type Format string
 
 const (
-	FormatSVG = "svg"
-	FormatPNG = "png"
+	SVG Format = "svg"
+	PNG        = "png"
 )
 
 func (f Format) Dir() string {
-	if f == FormatSVG {
+	switch f {
+	case SVG:
 		return "svg/"
+	case PNG:
+		return "72x72/"
 	}
-	return "72x72/"
+	return "/"
 }
 
 // Replace returns a copy of s with all emojis replaced by <img> tags.

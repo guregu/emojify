@@ -28,7 +28,7 @@ func TestTwemoji(t *testing.T) {
 		},
 	}
 	svg := New()
-	png := New(WithFormat(FormatPNG))
+	png := New(WithFormat(PNG))
 	for _, try := range table {
 		t.Run(try.in, func(t *testing.T) {
 			if got := svg.Replace(try.in); try.svg != got {
