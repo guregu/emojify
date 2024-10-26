@@ -15,6 +15,8 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
+// TODO: grab twemoji version from git / npm / whatever
+
 const (
 	officialCDN  = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/"
 	defaultClass = "emoji"
@@ -129,7 +131,7 @@ func WithCDN(href string) Option {
 }
 
 // WithClass specifies the class given to emoji replacement <img> elements.
-// Default is "twemoji".
+// Default is "emoji".
 func WithClass(class string) Option {
 	return func(t *Twemoji) {
 		t.class = class
