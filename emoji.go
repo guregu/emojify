@@ -103,6 +103,7 @@ func (tw Twemoji) node(emoji string, src string) *html.Node {
 			{Key: "draggable", Val: "false"},
 			{Key: "class", Val: tw.class},
 			{Key: "src", Val: tw.cdn + dir + src},
+			{Key: "width", Val: "72"},
 			{Key: "height", Val: "72"},
 			{Key: "alt", Val: emoji},
 		},
