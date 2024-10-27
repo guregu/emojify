@@ -18,13 +18,13 @@ func TestTwemoji(t *testing.T) {
 	}{
 		{
 			in:  "crow: 🐦‍⬛",
-			svg: `crow: <img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f426-200d-2b1b.svg" width="72" height="72" alt="🐦‍⬛"/>`,
-			png: `crow: <img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f426-200d-2b1b.png" width="72" height="72" alt="🐦‍⬛"/>`,
+			svg: `crow: <img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f426-200d-2b1b.svg" width="72" height="72" alt="🐦‍⬛"/>`,
+			png: `crow: <img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f426-200d-2b1b.png" width="72" height="72" alt="🐦‍⬛"/>`,
 		},
 		{
 			in:  "🌎, hello! for 🐦🦤",
-			svg: `<img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f30e.svg" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f426.svg" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f9a4.svg" width="72" height="72" alt="🦤"/>`,
-			png: `<img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f30e.png" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f426.png" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/72x72/1f9a4.png" width="72" height="72" alt="🦤"/>`,
+			svg: `<img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f30e.svg" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f426.svg" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f9a4.svg" width="72" height="72" alt="🦤"/>`,
+			png: `<img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f30e.png" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f426.png" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f9a4.png" width="72" height="72" alt="🦤"/>`,
 		},
 	}
 	svg := New()

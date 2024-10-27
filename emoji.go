@@ -15,13 +15,14 @@ import (
 	"golang.org/x/net/html/atom"
 )
 
-// TODO: grab twemoji version from git / npm / whatever
-
 const (
-	officialCDN  = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/"
+	// OfficialCDN is the official CDN hosting Twemoji assets.
+	OfficialCDN  = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@" + Version + "/assets/"
 	defaultClass = "emoji"
 )
 
+// Twemoji is a configuration/cache of emoji replacements.
+// The zero value will use [Default].
 type Twemoji struct {
 	cdn   string
 	class string
@@ -38,9 +39,10 @@ type emojiMatch struct {
 	node *html.Node
 }
 
+// New creates a new [Twemoji] with the given set of [Option].
 func New(opts ...Option) Twemoji {
 	t := Twemoji{
-		cdn:   officialCDN,
+		cdn:   OfficialCDN,
 		fmt:   SVG,
 		class: defaultClass,
 		nodes: make(map[rune][]emojiMatch),
@@ -69,10 +71,11 @@ func (tw *Twemoji) load() error {
 			}
 			runes[i] = rune(n)
 		}
+		text := string(runes)
 		item := emojiMatch{
-			str:  string(runes),
+			str:  text,
 			img:  base,
-			node: tw.node(string(runes), base),
+			node: tw.node(text, base),
 		}
 
 		buf.Reset()
@@ -159,8 +162,10 @@ func WithFormat(f Format) Option {
 type Format string
 
 const (
+	// SVG images.
 	SVG Format = "svg"
-	PNG        = "png"
+	// PNG (72x72 px) images.
+	PNG Format = "png"
 )
 
 func (f Format) Dir() string {

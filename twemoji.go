@@ -2,6 +2,9 @@
 
 package emojify
 
+// Version is the Twemoji library version.
+const Version = "15.1.0"
+
 var twemojiFiles = []string{
 	"1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.svg",
 	"1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.svg",
