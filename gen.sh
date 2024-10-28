@@ -1,6 +1,7 @@
 #!/bin/bash
 
 files=$(ls twemoji/assets/svg | awk '{ print length, $0 }' | sort -n -s -r | cut -d" " -f2-)
+ver=$(cd twemoji; git describe --tags --abbrev=0)
 output=twemoji.go
 
 
@@ -9,7 +10,6 @@ echo "" >> $output
 echo "package emojify" >> $output
 echo "" >> $output
 
-ver=$(cd twemoji; git describe --tags --abbrev=0)
 echo "// Version is the Twemoji library version." >> $output
 echo "const Version = \"${ver:1}\"" >> $output
 

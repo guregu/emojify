@@ -6,9 +6,10 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/guregu/emojify"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
+
+	"github.com/guregu/emojify"
 )
 
 func ExampleHTML() {
