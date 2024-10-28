@@ -1,13 +1,11 @@
 package emojify
 
-//go:generate ./gen.sh
+//go:generate ./script/gen.sh
 
 import (
 	"bytes"
 	"fmt"
 	"io"
-	"path"
-	"strconv"
 	"strings"
 	"unicode/utf8"
 
@@ -30,13 +28,13 @@ type Twemoji struct {
 	attrs AttrFunc
 
 	replacer *strings.Replacer
-	nodes    map[rune][]emojiMatch
+	nodes    map[rune][]resource
 }
 
-type emojiMatch struct {
-	str  string
-	img  string
-	node *html.Node
+type resource struct {
+	str  string     // unicode text
+	img  string     // filename
+	node *html.Node // <img> element
 }
 
 // New creates a new [Twemoji] with the given set of [Option].
@@ -45,7 +43,7 @@ func New(opts ...Option) Twemoji {
 		cdn:   OfficialCDN,
 		fmt:   SVG,
 		class: defaultClass,
-		nodes: make(map[rune][]emojiMatch),
+		nodes: make(map[rune][]resource),
 	}
 	for _, opt := range opts {
 		opt(&t)
@@ -57,26 +55,10 @@ func New(opts ...Option) Twemoji {
 }
 
 func (tw *Twemoji) load() error {
-	keyvals := make([]string, 0, len(twemojiFiles)*2)
+	keyvals := make([]string, 0, len(twemojiData)*2)
 	var buf bytes.Buffer
-	for _, base := range twemojiFiles {
-		ext := path.Ext(base)
-		filename := base[:len(base)-len(ext)]
-		hexes := strings.Split(filename, "-")
-		runes := make([]rune, len(hexes))
-		for i, hex := range hexes {
-			n, err := strconv.ParseInt(hex, 16, 64)
-			if err != nil {
-				return err
-			}
-			runes[i] = rune(n)
-		}
-		text := string(runes)
-		item := emojiMatch{
-			str:  text,
-			img:  base,
-			node: tw.node(text, base),
-		}
+	for _, item := range twemojiData {
+		item.node = tw.node(item.str, item.img)
 
 		buf.Reset()
 		if err := html.Render(&buf, item.node); err != nil {
@@ -96,7 +78,7 @@ func (tw *Twemoji) load() error {
 }
 
 func (tw Twemoji) node(emoji string, src string) *html.Node {
-	dir := tw.fmt.Dir()
+	dir := tw.fmt.dir()
 	if tw.fmt == PNG {
 		src = src[:len(src)-len("svg")] + "png"
 	}
@@ -168,7 +150,7 @@ const (
 	PNG Format = "png"
 )
 
-func (f Format) Dir() string {
+func (f Format) dir() string {
 	switch f {
 	case SVG:
 		return "svg/"

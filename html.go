@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
@@ -29,8 +30,15 @@ func (tw Twemoji) ReplaceHTML(root *html.Node) {
 	replaceTextNodes(root, tw.replaceEmojis)
 }
 
+const (
+	keycap = '\u20e3' // COMBINING ENCLOSING KEYCAP
+	zwj    = '\ufe0f' // VARIATION SELECTOR-16 (emoji selector)
+	lenZWJ = 3        // utf8.RuneLen(zwj)
+)
+
 func (tw Twemoji) replaceEmojis(node *html.Node) *html.Node {
 	search := node.Data
+	// TODO: mutate node in-place? saves one alloc
 	span := &html.Node{
 		Type:     html.ElementNode,
 		Data:     "span",
@@ -47,10 +55,30 @@ func (tw Twemoji) replaceEmojis(node *html.Node) *html.Node {
 	var hit bool
 scan:
 	for idx, char := range search {
-		if (char <= unicode.MaxASCII) ||
-			(skip != 0 && skip > idx) {
+		if (char < unicode.MaxASCII) || (skip != 0 && skip > idx) {
 			continue
 		}
+
+		// special case for number keys: _ + ZWJ + $20E3
+		// they're the only emoji that can begin with ascii
+		if char == keycap {
+			// back up to start of sequence
+			// and skip zwj if present
+			if idx > lenZWJ {
+				if peek, _ := utf8.DecodeRuneInString(search[idx-lenZWJ:]); peek == zwj {
+					idx -= lenZWJ
+				}
+			}
+			idx -= 1
+			if idx < 0 {
+				continue
+			}
+			char = rune(search[idx])
+			if char > unicode.MaxASCII {
+				continue
+			}
+		}
+
 		match, ok := tw.nodes[char]
 		if !ok {
 			continue

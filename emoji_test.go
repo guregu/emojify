@@ -26,11 +26,17 @@ func TestTwemoji(t *testing.T) {
 			svg: `<img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f30e.svg" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f426.svg" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="` + OfficialCDN + `svg/1f9a4.svg" width="72" height="72" alt="🦤"/>`,
 			png: `<img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f30e.png" width="72" height="72" alt="🌎"/>, hello! for <img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f426.png" width="72" height="72" alt="🐦"/><img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/1f9a4.png" width="72" height="72" alt="🦤"/>`,
 		},
+		{
+			in:  "6️⃣9️⃣ nice",
+			svg: `<img draggable="false" class="emoji" src="` + OfficialCDN + `svg/36-20e3.svg" width="72" height="72" alt="6️⃣"/><img draggable="false" class="emoji" src="` + OfficialCDN + `svg/39-20e3.svg" width="72" height="72" alt="9️⃣"/> nice`,
+			png: `<img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/36-20e3.png" width="72" height="72" alt="6️⃣"/><img draggable="false" class="emoji" src="` + OfficialCDN + `72x72/39-20e3.png" width="72" height="72" alt="9️⃣"/> nice`,
+		},
 	}
 	svg := New()
 	png := New(WithFormat(PNG))
 	for _, try := range table {
 		t.Run(try.in, func(t *testing.T) {
+			t.Logf("%#v", []byte(try.in))
 			if got := svg.Replace(try.in); try.svg != got {
 				t.Errorf("svg(%q) →\n got: %q\nwant: %q", try.in, got, try.svg)
 			}
@@ -42,12 +48,12 @@ func TestTwemoji(t *testing.T) {
 }
 
 func TestWithAttr(t *testing.T) {
-	test := "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤"
-	repl := New(WithAttrs(func(emoji string, defaults []html.Attribute) []html.Attribute {
+	test := "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤 & 5️⃣!"
+	tw := New(WithAttrs(func(emoji string, defaults []html.Attribute) []html.Attribute {
 		return append(defaults, html.Attribute{Key: "data-md", Val: emoji})
 	}))
-	got := repl.Replace(test)
-	for _, emoji := range []string{"🐦‍⬛", "🌎", "🐦", "🦤"} {
+	got := tw.Replace(test)
+	for _, emoji := range []string{"🐦‍⬛", "🌎", "🐦", "🦤", "5️⃣"} {
 		mdattr := fmt.Sprintf(`data-md="%s"`, emoji)
 		if !strings.Contains(got, mdattr) {
 			t.Error("not found:", emoji, "in:", got)
@@ -58,7 +64,7 @@ func TestWithAttr(t *testing.T) {
 func TestHTML(t *testing.T) {
 	text := &html.Node{
 		Type: html.TextNode,
-		Data: "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤!",
+		Data: "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤! 5️⃣",
 	}
 	doc := &html.Node{
 		Type:       html.ElementNode,
@@ -81,14 +87,14 @@ func TestHTML(t *testing.T) {
 			ct++
 		}
 	}
-	if ct != 4 {
+	if ct != 5 {
 		t.Error("unexpected # of img elements:", ct)
 	}
 }
 
 func BenchmarkTwemojiReplace(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		WriteString(io.Discard, "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤!")
+		WriteString(io.Discard, "hello 🐦‍⬛ world 🌎 for 🐦 & 5️⃣!")
 	}
 }
 
@@ -96,7 +102,7 @@ func BenchmarkTwemojiHTML(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		text := &html.Node{
 			Type: html.TextNode,
-			Data: "hello 🐦‍⬛ world 🌎 for 🐦 & 🦤!",
+			Data: "hello 🐦‍⬛ world 🌎 for 🐦 & 5️⃣!",
 		}
 		doc := &html.Node{
 			Type:       html.ElementNode,
