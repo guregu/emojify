@@ -3,7 +3,7 @@
 package emojify
 
 // Version is the Twemoji library version.
-const Version = "15.1.0"
+const Version = "16.0.1"
 
 var twemojiData = []resource{
 	{str: "👨🏻\u200d❤️\u200d💋\u200d👨🏻", img: "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.svg"},
@@ -1564,6 +1564,7 @@ var twemojiData = []resource{
 	{str: "🇨🇳", img: "1f1e8-1f1f3.svg"},
 	{str: "🇨🇴", img: "1f1e8-1f1f4.svg"},
 	{str: "🇨🇵", img: "1f1e8-1f1f5.svg"},
+	{str: "🇨🇶", img: "1f1e8-1f1f6.svg"},
 	{str: "🇨🇷", img: "1f1e8-1f1f7.svg"},
 	{str: "🇨🇺", img: "1f1e8-1f1fa.svg"},
 	{str: "🇨🇻", img: "1f1e8-1f1fb.svg"},
@@ -3600,6 +3601,8 @@ var twemojiData = []resource{
 	{str: "🪆", img: "1fa86.svg"},
 	{str: "🪇", img: "1fa87.svg"},
 	{str: "🪈", img: "1fa88.svg"},
+	{str: "\U0001fa89", img: "1fa89.svg"},
+	{str: "\U0001fa8f", img: "1fa8f.svg"},
 	{str: "🪐", img: "1fa90.svg"},
 	{str: "🪑", img: "1fa91.svg"},
 	{str: "🪒", img: "1fa92.svg"},
@@ -3646,6 +3649,7 @@ var twemojiData = []resource{
 	{str: "🪻", img: "1fabb.svg"},
 	{str: "🪼", img: "1fabc.svg"},
 	{str: "🪽", img: "1fabd.svg"},
+	{str: "\U0001fabe", img: "1fabe.svg"},
 	{str: "🪿", img: "1fabf.svg"},
 	{str: "🫀", img: "1fac0.svg"},
 	{str: "🫁", img: "1fac1.svg"},
@@ -3653,6 +3657,7 @@ var twemojiData = []resource{
 	{str: "🫃", img: "1fac3.svg"},
 	{str: "🫄", img: "1fac4.svg"},
 	{str: "🫅", img: "1fac5.svg"},
+	{str: "\U0001fac6", img: "1fac6.svg"},
 	{str: "🫎", img: "1face.svg"},
 	{str: "🫏", img: "1facf.svg"},
 	{str: "🫐", img: "1fad0.svg"},
@@ -3667,6 +3672,8 @@ var twemojiData = []resource{
 	{str: "🫙", img: "1fad9.svg"},
 	{str: "🫚", img: "1fada.svg"},
 	{str: "🫛", img: "1fadb.svg"},
+	{str: "\U0001fadc", img: "1fadc.svg"},
+	{str: "\U0001fadf", img: "1fadf.svg"},
 	{str: "🫠", img: "1fae0.svg"},
 	{str: "🫡", img: "1fae1.svg"},
 	{str: "🫢", img: "1fae2.svg"},
@@ -3676,6 +3683,7 @@ var twemojiData = []resource{
 	{str: "🫦", img: "1fae6.svg"},
 	{str: "🫧", img: "1fae7.svg"},
 	{str: "🫨", img: "1fae8.svg"},
+	{str: "\U0001fae9", img: "1fae9.svg"},
 	{str: "🫰", img: "1faf0.svg"},
 	{str: "🫱", img: "1faf1.svg"},
 	{str: "🫲", img: "1faf2.svg"},
